@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plate Tracking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <link rel="stylesheet" href="/style/custom.css">
+
+</head>
+<body>
+
+<section class="section">
+    <div class="container">
+
+        <div class="app">
+
+            <div class="has-text-centered">
+                <table class="table is-bordered is-narrow is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Available</th>
+                        <th>Admin</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in data" v-bind:class="getRowClass(item.available)">
+
+                        <td>{{item.name}}</td>
+                        <td>{{item.available}}</td>
+                        <td>
+
+                            <button class="button is-primary" @click="notifyServer(item)">Used</button>
+                            <button class="button is-info" @click="refill(item)">Refill</button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br/>
+
+            <div class="card">
+                <div class="card-content">
+                    <div class="field">
+                        <div class="control">
+                            <input class="input"
+                                   autocomplete="off"
+                                   placeholder="Name"
+                                   v-model="newItem"
+                                   @keyup.enter="addItem">
+                            <button class="button is-info"
+                                    @click="addItem(newItem)"
+                                    v-show="newItem.length > 0">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        var socket = io.connect('http://localhost:3000');
+
+        var app = new Vue({
+            data: {
+                data: [],
+                newItem: "",
+            },
+            methods: {
+                notifyServer: function (item) {
+                    socket.emit('notifyUse', item)
+                },
+                refill: function (item) {
+                    socket.emit('refill', item)
+                },
+                addItem: function (item) {
+                    socket.emit('newItem', {name: item})
+                },
+                getRowClass(count) {
+                    return {
+                        'is-warning': count <= 15 && count > 5,
+                        'is-danger': count <= 5
+                    }
+                }
+            }
+        });
+
+        socket.on('newItem', function (data) {
+            app.data.push(data)
+        })
+
+        socket.on('init', function (data) {
+            app.data = data.data
+        });
+
+        socket.on('update', function (data) {
+
+            var foundItems = app.data.filter(function (d) {
+                return d._id === data._id;
+            })
+
+            if (foundItems && foundItems.length > 0) {
+                foundItems[0].name = data.name
+                foundItems[0].available = data.available
+            }
+        })
+
+
+        //            function hasClass(el, className) {
+        //                if (el.classList)
+        //                    return el.classList.contains(className);
+        //                else
+        //                    return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+        //            }
+        //
+        //            function removeClass(el, className) {
+        //                if (el.classList)
+        //                    el.classList.remove(className);
+        //                else
+        //                    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        //            }
+        //
+        //            function addClass(el, className) {
+        //                if (el.classList)
+        //                    el.classList.add(className);
+        //                else
+        //                    el.className += ' ' + className;
+        //            }
+        //
+        //            function assignClasses(el) {
+        //                if (parseInt(el.dataset.clicks) <= 15) {
+        //
+        //                    addClass(el, 'is-warning');
+        //
+        //                    if (hasClass(el, 'is-primary')) {
+        //                        removeClass(el, 'is-primary')
+        //                    }
+        //                    if (hasClass(el, 'is-danger')) {
+        //                        removeClass(el, 'is-danger')
+        //                    }
+        //
+        //
+        //                }
+        //                if (parseInt(el.dataset.clicks) <= 5) {
+        //                    addClass(el, 'is-danger');
+        //
+        //                    if (hasClass(el, 'is-primary')) {
+        //                        removeClass(el, 'is-primary')
+        //                    }
+        //                    if (hasClass(el, 'is-warning')) {
+        //                        removeClass(el, 'is-warning')
+        //                    }
+        //                }
+        //            }
+        //
+        //            var elements = document.querySelectorAll('.button');
+        //            Array.prototype.forEach.call(elements, function (el, i) {
+        //
+        //                if (!el.dataset.clicks) {
+        //                    el.dataset.clicks = (50).toString();
+        //                    el.innerHTML = el.dataset.name + " " + el.dataset.clicks + "/50"
+        //                }
+        //
+        //                el.addEventListener('click', function () {
+        //
+        //                    if (parseInt(el.dataset.clicks) > 0) {
+        //                        el.dataset.clicks = parseInt(el.dataset.clicks) - 1;
+        //                        el.innerHTML = el.dataset.name + " " + el.dataset.clicks + "/50"
+        //                    }
+        //
+        //                    assignClasses(el)
+        //
+        //                });
+        //            });
+
+
+        app.$mount(".app");
+    </script>
+
+</body>
+</html>

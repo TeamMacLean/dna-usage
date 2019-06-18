@@ -1,0 +1,11 @@
+tr.is-warning {
+    background-color: #ffdd57;
+    border-color: transparent;
+    color: rgba(0, 0, 0, .7);
+}
+
+tr.is-danger {
+    background-color: #ff3860;
+    border-color: transparent;
+    color: #fff;
+}
