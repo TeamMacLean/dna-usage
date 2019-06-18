@@ -115,76 +115,7 @@
                 foundItems[0].available = data.available
             }
         })
-
-
-        //            function hasClass(el, className) {
-        //                if (el.classList)
-        //                    return el.classList.contains(className);
-        //                else
-        //                    return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-        //            }
-        //
-        //            function removeClass(el, className) {
-        //                if (el.classList)
-        //                    el.classList.remove(className);
-        //                else
-        //                    el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-        //            }
-        //
-        //            function addClass(el, className) {
-        //                if (el.classList)
-        //                    el.classList.add(className);
-        //                else
-        //                    el.className += ' ' + className;
-        //            }
-        //
-        //            function assignClasses(el) {
-        //                if (parseInt(el.dataset.clicks) <= 15) {
-        //
-        //                    addClass(el, 'is-warning');
-        //
-        //                    if (hasClass(el, 'is-primary')) {
-        //                        removeClass(el, 'is-primary')
-        //                    }
-        //                    if (hasClass(el, 'is-danger')) {
-        //                        removeClass(el, 'is-danger')
-        //                    }
-        //
-        //
-        //                }
-        //                if (parseInt(el.dataset.clicks) <= 5) {
-        //                    addClass(el, 'is-danger');
-        //
-        //                    if (hasClass(el, 'is-primary')) {
-        //                        removeClass(el, 'is-primary')
-        //                    }
-        //                    if (hasClass(el, 'is-warning')) {
-        //                        removeClass(el, 'is-warning')
-        //                    }
-        //                }
-        //            }
-        //
-        //            var elements = document.querySelectorAll('.button');
-        //            Array.prototype.forEach.call(elements, function (el, i) {
-        //
-        //                if (!el.dataset.clicks) {
-        //                    el.dataset.clicks = (50).toString();
-        //                    el.innerHTML = el.dataset.name + " " + el.dataset.clicks + "/50"
-        //                }
-        //
-        //                el.addEventListener('click', function () {
-        //
-        //                    if (parseInt(el.dataset.clicks) > 0) {
-        //                        el.dataset.clicks = parseInt(el.dataset.clicks) - 1;
-        //                        el.innerHTML = el.dataset.name + " " + el.dataset.clicks + "/50"
-        //                    }
-        //
-        //                    assignClasses(el)
-        //
-        //                });
-        //            });
-
-
+        
         app.$mount(".app");
     </script>
 
